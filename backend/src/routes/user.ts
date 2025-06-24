@@ -21,7 +21,7 @@ userRoutes.post("/signup", async (c) => {
     try {
         const user = await prisma.user.create({
             data: {
-                email: body.email,
+                username: body.username,
                 password: body.password,
                 name: body.name
             }
@@ -37,7 +37,7 @@ userRoutes.post("/signup", async (c) => {
 });
 
 // 🔐 Login User
-userRoutes.post("/login", async (c) => {
+userRoutes.post("/signin", async (c) => {
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
@@ -47,12 +47,12 @@ userRoutes.post("/login", async (c) => {
     try {
         const user = await prisma.user.findUnique({
             where: {
-                email: body.email,
+                username: body.username,
             },
         });
 
         if (!user || user.password !== body.password) {
-            return c.json({ message: "Invalid email or password" }, 401);
+            return c.json({ message: "Invalid username or password" }, 401);
         }
 
         const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
