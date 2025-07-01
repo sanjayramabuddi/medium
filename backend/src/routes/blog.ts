@@ -37,7 +37,7 @@ blogRoutes.post('/', async (c) => {
     const body = await c.req.json();
 
     try {
-        const post = await prisma.post.create({
+        const post = await prisma.blog.create({
             data: {
                 title: body.title,
                 content: body.content,
@@ -62,7 +62,7 @@ blogRoutes.put('/', async (c) => {
     const body = await c.req.json();
 
     try {
-        const updated = await prisma.post.update({
+        const updated = await prisma.blog.update({
             where: {
                 id: body.id,
             },
@@ -86,7 +86,18 @@ blogRoutes.get('/bulk', async (c) => {
     }).$extends(withAccelerate());
 
     try {
-        const posts = await prisma.post.findMany();
+        const posts = await prisma.blog.findMany({
+            select: {
+                content: true,
+                title: true,
+                id: true,
+                author: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        });
         return c.json({ posts }, 200);
     } catch (error) {
         console.error("Fetch posts error:", error);
@@ -103,7 +114,7 @@ blogRoutes.get('/:id', async (c) => {
     const id = c.req.param('id');
 
     try {
-        const post = await prisma.post.findUnique({
+        const post = await prisma.blog.findUnique({
             where: { id },
         });
 
