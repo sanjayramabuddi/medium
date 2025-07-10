@@ -15,15 +15,19 @@ export const blogRoutes = new Hono<{
 
 blogRoutes.use('/*', async (c, next) => {
     const authHeader = c.req.header('authorization') || "";
-    const user = await verify(authHeader, c.env.JWT_SECRET);
-
-    console.log("Middlware User: ", user);
-
-    if (user?.id) {
-        c.set('userId', user.id);
-        await next();
-    } else {
-        return c.json({ message: "Unauthorized: Please login!" }, 401);
+    try {
+        const user = await verify(authHeader, c.env.JWT_SECRET);
+        if (user) {
+            c.set('userId', user.id);
+            await next();
+        } else {
+            return c.json({ message: "Unauthorized: Please login!" }, 401);
+        }
+    } catch (error) {
+        c.status(403);
+        return c.json({
+            message: "You are not logged in"
+        })
     }
 });
 
@@ -41,7 +45,7 @@ blogRoutes.post('/', async (c) => {
             data: {
                 title: body.title,
                 content: body.content,
-                authorId,
+                authorId: Number(authorId)
             },
         });
 
@@ -114,8 +118,20 @@ blogRoutes.get('/:id', async (c) => {
     const id = c.req.param('id');
 
     try {
-        const post = await prisma.blog.findUnique({
-            where: { id },
+        const post = await prisma.blog.findFirst({
+            where: {
+                id: Number(id)
+            },
+            select: {
+                id: true,
+                title: true,
+                content: true,
+                author: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
         });
 
         if (!post) {
