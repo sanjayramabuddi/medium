@@ -15,17 +15,17 @@ export const signinInput = z.object({
 
 export type SigninType = z.infer<typeof signinInput>;
 
-export const createPostInput = z.object({
+export const createBlogInput = z.object({
     title: z.string(),
     content: z.string(),
 });
 
-export type CreatePostType = z.infer<typeof createPostInput>;
+export type CreateBlogInput = z.infer<typeof createBlogInput>;
 
-export const updatePostInput = z.object({
+export const updateBlogInput = z.object({
     title: z.string(),
     content: z.string(),
     id: z.number()
 });
 
-export type UpdatePostType = z.infer<typeof updatePostInput>;
+export type UpdateBlogInput = z.infer<typeof updateBlogInput>;
