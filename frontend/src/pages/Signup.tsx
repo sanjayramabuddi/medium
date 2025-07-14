@@ -1,14 +1,14 @@
 import { AuthHeader } from "../components/AuthHeader";
 import { Quote } from "../components/Quote";
 import { LabelledInput } from "../components/AuthHeader";
-import type { SignupInput } from "@100xdevs/medium-common";
+import type { SignupType } from "@kiddoo/medium-common";
 import { useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useNavigate } from "react-router";
 
 const Signup = () => {
-  const [postInputs, setPostInputs] = useState<SignupInput>({
+  const [postInputs, setPostInputs] = useState<SignupType>({
     name: "",
     username: "",
     password: "",
@@ -20,7 +20,7 @@ const Signup = () => {
       `${BACKEND_URL}/api/v1/user/signup`,
       postInputs
     );
-    const jwt = response.data;
+    const jwt = response.data.token;
     localStorage.setItem("token", jwt);
     navigate("/blogs");
   };

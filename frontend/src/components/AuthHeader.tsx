@@ -13,7 +13,7 @@ export const AuthHeader = ({ type }: { type: "signup" | "signin" }) => {
           to={type === "signup" ? "/signin" : "/signup"}
           className="underline ml-1"
         >
-          {type === "signup" ? "login" : "signup"}
+          {type === "signup" ? "signin" : "signup"}
         </Link>
       </div>
     </div>

@@ -1,14 +1,14 @@
 import { AuthHeader } from "../components/AuthHeader";
 import { Quote } from "../components/Quote";
 import { LabelledInput } from "../components/AuthHeader";
-import type { SigninInput } from "@100xdevs/medium-common";
+import type { SigninType } from "@kiddoo/medium-common";
 import { useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useNavigate } from "react-router";
 
 export const Signin = () => {
-  const [postInputs, setPostInputs] = useState<SigninInput>({
+  const [postInputs, setPostInputs] = useState<SigninType>({
     username: "",
     password: "",
   });
@@ -20,7 +20,7 @@ export const Signin = () => {
       `${BACKEND_URL}/api/v1/user/signin`,
       postInputs
     );
-    const jwt = response.data;
+    const jwt = response.data.token;
     localStorage.setItem("token", jwt);
     navigate("/blogs");
   };

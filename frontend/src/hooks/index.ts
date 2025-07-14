@@ -5,7 +5,7 @@ import { BACKEND_URL } from "../config";
 export interface Blog {
     "content": string;
     "title": string;
-    "id": number
+    "id": number;
     "author": {
         "name": string
     }
@@ -22,7 +22,7 @@ export const useBlogs = () => {
             }
         })
             .then(response => {
-                setBlogs(response.data.blogs);
+                setBlogs(response.data.posts);
                 setLoading(false);
             })
     }, [])
@@ -44,7 +44,7 @@ export const useBlog = ({ id }: { id: string }) => {
             }
         })
             .then(response => {
-                setBlog(response.data.blog);
+                setBlog(response.data.post);
                 setLoading(false);
             })
     }, [id])
